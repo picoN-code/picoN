@@ -1,0 +1,23 @@
+  store name as text World text.
+  say text Hello text, name.
+
+  store i as 5.
+  while i is greater than 0
+    say i.
+    subtract 1 from i.
+  end while.
+
+  define factorial using n
+    if n is 0 then
+      give back 1.
+    otherwise
+      store temp as n.
+      subtract 1 from temp.
+      store result as run factorial with temp.
+      multiply result by n.
+      give back result.
+    end if.
+  end define.
+
+  store answer as run factorial with 5.
+  say answer.

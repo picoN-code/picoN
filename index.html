@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>picoN - Programming in Plain English</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='2' fill='%232563eb'/><text x='8' y='12.5' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'>P</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface2: #334155;
+            --border: #475569;
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --accent: #3b82f6;
+            --accent-glow: #60a5fa;
+            --green: #22c55e;
+            --green-dim: #166534;
+            --purple: #a78bfa;
+            --orange: #fb923c;
+            --pink: #f472b6;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(59,130,246,0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 50%, rgba(167,139,250,0.1) 0%, transparent 50%);
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-5%, 3%) rotate(2deg); }
+        }
+
+        .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+        .logo {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+
+        .btn-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #2563eb);
+            color: white;
+            box-shadow: 0 4px 25px rgba(59,130,246,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(59,130,246,0.5);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface2);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Feature Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(59,130,246,0.15);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            .comparison { grid-template-columns: 1fr; }
+        }
+
+        .code-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            padding: 0.75rem 1rem;
+            background: var(--surface2);
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot-js { background: #f7df1e; }
+        .dot-pn { background: var(--green); }
+
+        pre {
+            padding: 1.25rem;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        code { color: var(--text); }
+
+        /* Syntax Highlighting */
+        .kw { color: var(--accent); }
+        .str { color: var(--green); }
+        .num { color: var(--orange); }
+        .cmt { color: #64748b; font-style: italic; }
+        .fn { color: var(--purple); }
+        .var { color: var(--text); }
+        .bool { color: var(--pink); }
+        .op { color: var(--text-dim); }
+
+        /* Code Sections */
+        .code-section {
+            margin: 2.5rem 0;
+        }
+
+        .code-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .code-section p {
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .code-section .code-block {
+            margin-top: 0.5rem;
+        }
+
+        /* Install */
+        .install-steps {
+            list-style: none;
+            counter-reset: step;
+            margin-top: 1.5rem;
+        }
+
+        .install-steps li {
+            counter-increment: step;
+            padding: 1rem 1rem 1rem 3.5rem;
+            position: relative;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: border-color 0.3s;
+        }
+
+        .install-steps li:hover {
+            border-color: var(--accent);
+        }
+
+        .install-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* Perfect For */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.5rem 1.25rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        /* Philosophy */
+        .philosophy {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(167,139,250,0.1));
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .philosophy blockquote {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Download CTA */
+        .download-cta {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--bg) 0%, rgba(59,130,246,0.08) 50%, var(--bg) 100%);
+        }
+
+        .download-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-cta p {
+            color: var(--text-dim);
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Floating code samples */
+        .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .sample-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .sample-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .sample-card .code-header {
+            background: var(--surface2);
+        }
+
+        .sample-card pre {
+            margin: 0;
+            min-height: 120px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">picoN</div>
+            <p class="tagline">Programming in Plain English.</p>
+            <p class="hero-desc">
+                picoN is a lightweight programming language designed to make coding simple, readable, and approachable.
+                Instead of learning complex symbols, brackets, and semicolons, write programs using natural English-like statements.
+            </p>
+            <div class="btn-group">
+                <a href="#download" class="btn btn-primary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    Download picoN
+                </a>
+                <a href="#why" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why picoN -->
+    <section class="section" id="why">
+        <h2 class="section-title">Why picoN?</h2>
+
+        <!-- Readable -->
+        <div class="code-section" style="margin-top:3rem;">
+            <h3>Readable by Humans</h3>
+            <p>Most programming languages look like this:</p>
+            <div class="comparison">
+                <div class="code-block">
+                    <div class="code-header"><span class="dot dot-js"></span> JavaScript</div>
+                    <pre><code><span class="kw">let</span> age = <span class="num">25</span>;
+<span class="kw">if</span> (age >= <span class="num">18</span>) {
+    console.<span class="fn">log</span>(<span class="str">"Adult"</span>);
+}</code></pre>
+                </div>
+                <div class="code-block">
+                    <div class="code-header"><span class="dot dot-pn"></span> picoN</div>
+                    <pre><code><span class="kw">store</span> age <span class="kw">as</span> <span class="num">25</span>.
+
+<span class="kw">if</span> age <span class="kw">is at least</span> <span class="num">18</span> <span class="kw">then</span>
+  <span class="kw">say</span> Adult.
+<span class="kw">end if</span>.</code></pre>
+                </div>
+            </div>
+            <p style="margin-top:1rem; text-align:center; color:var(--green); font-weight:600;">The code reads almost like plain English.</p>
+        </div>
+
+        <!-- Minimal Symbols -->
+        <div class="code-section">
+            <h3>Minimal Symbols</h3>
+            <p>picoN intentionally keeps punctuation to a minimum. Only two symbols are used:</p>
+            <div class="tags" style="margin-top:1rem;">
+                <span class="tag" style="font-size:1.1rem;">Period (.)</span>
+                <span class="tag" style="font-size:1.1rem;">Comma (,)</span>
+            </div>
+            <div class="tags" style="margin-top:1rem;">
+                <span class="tag">No braces</span>
+                <span class="tag">No parentheses</span>
+                <span class="tag">No semicolons</span>
+                <span class="tag">No complicated syntax</span>
+            </div>
+        </div>
+
+        <!-- Built for Learning -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4E6;</div>
+                <h3>Variables</h3>
+                <p>Create and update variables with clear, English-like statements.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4AC;</div>
+                <h3>Input &amp; Output</h3>
+                <p>Ask users for input and display results naturally.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F522;</div>
+                <h3>Arithmetic</h3>
+                <p>Add, subtract, multiply, and divide with words.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F9EA;</div>
+                <h3>Conditions</h3>
+                <p>Make decisions using if/otherwise blocks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F501;</div>
+                <h3>Loops</h3>
+                <p>Repeat actions with while, count, and repeat loops.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x2699;&#xFE0F;</div>
+                <h3>Functions</h3>
+                <p>Define reusable functions with parameters and return values.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Examples -->
+    <section class="section">
+        <h2 class="section-title">See picoN in Action</h2>
+        <p class="section-subtitle">Simple, clean, and easy to understand.</p>
+
+        <div class="sample-grid">
+            <!-- Variables -->
+            <div class="sample-card">
+                <div class="code-header"><span class="dot dot-pn"></span> Variables</div>
+                <pre><code><span class="kw">store</span> age <span class="kw">as</span> <span class="num">25</span>.
+<span class="kw">store</span> name <span class="kw">as</span> <span class="str">text Alex text</span>.
+
+<span class="kw">set</span> age <span class="kw">to</span> <span class="num">26</span>.</code></pre>
+            </div>
+
+            <!-- Input -->
+            <div class="sample-card">
+                <div class="code-header"><span class="dot dot-pn"></span> User Input</div>
+                <pre><code><span class="kw">ask</span> What is your name <span class="kw">into</span> username.
+
+<span class="kw">ask</span> Enter your age <span class="kw">into</span> age <span class="kw">as number</span>.</code></pre>
+            </div>
+
+            <!-- Output -->
+            <div class="sample-card">
+                <div class="code-header"><span class="dot dot-pn"></span> Output</div>
+                <pre><code><span class="kw">say</span> Hello.
+<span class="kw">say</span> name.
+<span class="kw">say</span> <span class="str">text Welcome text</span>, username.</code></pre>
+            </div>
+
+            <!-- Conditions -->
+            <div class="sample-card">
+                <div class="code-header"><span class="dot dot-pn"></span> Conditions</div>
+                <pre><code><span class="kw">if</span> age <span class="kw">is greater than</span> <span class="num">18</span> <span class="kw">then</span>
+  <span class="kw">say</span> Adult.
+<span class="kw">otherwise</span>
+  <span class="kw">say</span> Minor.
+<span class="kw">end if</span>.</code></pre>
+            </div>
+
+            <!-- Loops -->
+            <div class="sample-card">
+                <div class="code-header"><span class="dot dot-pn"></span> Loops</div>
+                <pre><code><span class="kw">repeat</span> <span class="num">5</span> <span class="kw">times</span>
+  <span class="kw">say</span> Hello.
+<span class="kw">end repeat</span>.
+
+<span class="kw">while</span> count <span class="kw">is less than</span> <span class="num">10</span>
+  <span class="kw">add</span> <span class="num">1</span> <span class="kw">to</span> count.
+<span class="kw">end while</span>.</code></pre>
+            </div>
+
+            <!-- Functions -->
+            <div class="sample-card">
+                <div class="code-header"><span class="dot dot-pn"></span> Functions</div>
+                <pre><code><span class="kw">define</span> <span class="fn">greet</span> <span class="kw">using</span> name
+  <span class="kw">say</span> <span class="str">text Hello text</span>, name.
+<span class="kw">end define</span>.
+
+<span class="kw">run</span> <span class="fn">greet</span> <span class="kw">with</span> Alice.</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full Examples -->
+    <section class="section">
+        <h2 class="section-title">Complete Programs</h2>
+
+        <!-- Countdown -->
+        <div class="code-section">
+            <h3>Countdown</h3>
+            <div class="code-block">
+                <div class="code-header"><span class="dot dot-pn"></span> countdown.pico</div>
+                <pre><code><span class="kw">store</span> i <span class="kw">as</span> <span class="num">5</span>.
+
+<span class="kw">while</span> i <span class="kw">is greater than</span> <span class="num">0</span>
+  <span class="kw">say</span> i.
+  <span class="kw">subtract</span> <span class="num">1</span> <span class="kw">from</span> i.
+<span class="kw">end while</span>.
+
+<span class="kw">say</span> Blastoff.</code></pre>
+            </div>
+        </div>
+
+        <!-- Factorial -->
+        <div class="code-section">
+            <h3>Factorial Function</h3>
+            <div class="code-block">
+                <div class="code-header"><span class="dot dot-pn"></span> factorial.pico</div>
+                <pre><code><span class="kw">define</span> <span class="fn">factorial</span> <span class="kw">using</span> n
+  <span class="kw">if</span> n <span class="kw">is</span> <span class="num">0</span> <span class="kw">then</span>
+    <span class="kw">give back</span> <span class="num">1</span>.
+  <span class="kw">otherwise</span>
+    <span class="kw">store</span> temp <span class="kw">as</span> n.
+    <span class="kw">subtract</span> <span class="num">1</span> <span class="kw">from</span> temp.
+    <span class="kw">store</span> result <span class="kw">as</span> <span class="kw">run</span> <span class="fn">factorial</span> <span class="kw">with</span> temp.
+    <span class="kw">multiply</span> result <span class="kw">by</span> n.
+    <span class="kw">give back</span> result.
+  <span class="kw">end if</span>.
+<span class="kw">end define</span>.
+
+<span class="kw">store</span> answer <span class="kw">as</span> <span class="kw">run</span> <span class="fn">factorial</span> <span class="kw">with</span> <span class="num">5</span>.
+<span class="kw">say</span> answer.</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Install -->
+    <section class="section" id="install">
+        <h2 class="section-title">Install picoN</h2>
+        <p class="section-subtitle">Getting started takes only a few minutes.</p>
+
+        <div style="max-width:600px; margin:0 auto;">
+            <p style="margin-bottom:1rem; color:var(--text-dim);"><strong style="color:var(--text);">Requirements:</strong> Python 3.x</p>
+            <ol class="install-steps">
+                <li>Download picoN</li>
+                <li>Extract the files</li>
+                <li>Open the project in VS Code</li>
+                <li>Create a <code style="color:var(--green);">.pico</code> file</li>
+                <li>Write your program</li>
+                <li>Run: <code style="color:var(--accent);">python picon.py myprogram.pico</code></li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Perfect For -->
+    <section class="section">
+        <h2 class="section-title">Perfect For</h2>
+        <div class="tags">
+            <span class="tag">Students</span>
+            <span class="tag">Teachers</span>
+            <span class="tag">Coding Clubs</span>
+            <span class="tag">Programming Courses</span>
+            <span class="tag">Beginners Learning Logic</span>
+            <span class="tag">Rapid Scripting</span>
+            <span class="tag">Language Design Experiments</span>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="section">
+        <div class="philosophy">
+            <h2 style="margin-bottom:1rem;">Philosophy</h2>
+            <blockquote>
+                "Programming should be about solving problems, not memorizing symbols.
+                picoN removes unnecessary complexity and lets you write code that reads naturally.
+                If you can read English, you can start understanding picoN immediately."
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Download CTA -->
+    <section class="download-cta" id="download">
+        <h2>Download picoN</h2>
+        <p>Start coding with a language designed for clarity, simplicity, and learning.</p>
+        <div class="btn-group">
+            <a href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases" class="btn btn-primary" target="_blank">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                Download Latest Version
+            </a>
+            <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" class="btn btn-secondary" target="_blank">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                View on GitHub
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>picoN &mdash; Programming in Plain English.</p>
+    </footer>
+
+</body>
+</html>
