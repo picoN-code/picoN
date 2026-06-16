@@ -1,0 +1,165 @@
+=====================================
+         picoN Language Reference
+=====================================
+
+RULES:
+- Only symbols allowed: comma (,) and period (.)
+- Every statement ends with a period (.)
+- Block-opening lines (if, while, repeat, count, define) do NOT end with a period
+- Block-closing lines (end if, end while, etc.) end with a period
+- Comments start with "note"
+
+
+--- VARIABLES ---
+
+  store NAME as VALUE.
+  store age as 25.
+  store name as text Hello text.
+  store active as yes.
+
+  set NAME to VALUE.
+  set age to 30.
+
+
+--- ARITHMETIC ---
+
+  add VALUE to NAME.
+  add 5 to age.
+
+  subtract VALUE from NAME.
+  subtract 3 from age.
+
+  multiply NAME by VALUE.
+  multiply age by 2.
+
+  divide NAME by VALUE.
+  divide age by 4.
+
+
+--- OUTPUT ---
+
+  say VALUE.
+  say name.
+
+  say VALUE, VALUE, VALUE.
+  say text Hello text, name, text ! text.
+
+  say blank.
+
+
+--- INPUT ---
+
+  ask PROMPT into NAME.
+  ask What is your name into username.
+
+  ask PROMPT into NAME as number.
+  ask Enter your age into age as number.
+
+
+--- CONDITIONS ---
+
+  NAME is VALUE               (equality)
+  NAME is not VALUE           (inequality)
+  NAME is greater than VALUE  (greater than)
+  NAME is less than VALUE     (less than)
+  NAME is at least VALUE      (greater than or equal)
+  NAME is at most VALUE       (less than or equal)
+
+  Combine with: and, or, not
+
+  Examples:
+    if age is 25 then
+    if age is greater than 20 then
+    if age is not 30 then
+    if age is at least 18 then
+    if age is at most 65 then
+    if x is greater than 5 and y is less than 10 then
+    if not x is 0 then
+
+
+--- IF STATEMENTS ---
+
+  if CONDITION then
+    BODY
+  end if.
+
+  if CONDITION then
+    BODY
+  otherwise
+    BODY
+  end if.
+
+
+--- LOOPS ---
+
+  repeat NUMBER times
+    BODY
+  end repeat.
+
+  while CONDITION
+    BODY
+  end while.
+
+  count NAME from START to END
+    BODY
+  end count.
+
+  stop loop.
+  next step.
+
+
+--- FUNCTIONS ---
+
+  define FUNCTIONNAME
+    BODY
+  end define.
+
+  define FUNCTIONNAME using PARAM, PARAM, PARAM
+    BODY
+  end define.
+
+  run FUNCTIONNAME.
+  run FUNCTIONNAME with VALUE, VALUE, VALUE.
+
+  give back VALUE.
+
+
+--- TYPES ---
+
+  number   — integers or decimals (25, 3.14)
+  text     — delimited by "text" on both sides (text Hello text)
+  boolean  — yes or no
+
+
+--- EXAMPLES ---
+
+  note Greet the user.
+  store name as text World text.
+  say text Hello text, name, text ! text.
+
+  note Countdown loop.
+  store i as 5.
+  while i is greater than 0
+    say i.
+    subtract 1 from i.
+  end while.
+
+  note Factorial function.
+  define factorial using n
+    if n is 0 then
+      give back 1.
+    otherwise
+      store temp as n.
+      subtract 1 from temp.
+      store result as run factorial with temp.
+      multiply result by n.
+      give back result.
+    end if.
+  end define.
+
+  store answer as run factorial with 5.
+  say answer.
+
+=====================================
+     Run: python picon.py file.pico
+=====================================

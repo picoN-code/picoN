@@ -1,0 +1,16 @@
+note This program greets the user and counts down.
+
+define greet using name
+  say text Hello text, name, text welcome to picoN text.
+end define.
+
+ask What is your name into username.
+run greet with username.
+
+store counter as 5.
+while counter is greater than 0
+  say counter.
+  subtract 1 from counter.
+end while.
+
+say text Countdown complete text.
